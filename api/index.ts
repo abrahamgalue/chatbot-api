@@ -1,12 +1,14 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const { GoogleGenAI } = require('@google/genai')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEN_AI_KEY })
 
@@ -26,7 +28,9 @@ app.post('/gemini', async (req, res) => {
   res.send(response)
 })
 
-app.use((req, res) => res.send('<h1>Hello World</h1>'))
+app.use((req, res) =>
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+)
 
 app.listen(3000, () => console.log('Server ready on port 3000.'))
 
