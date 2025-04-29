@@ -1,13 +1,19 @@
 {
   "name": "chatbot-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API for chatting with Gemini",
   "main": "index.js",
   "scripts": {
+    "dev": "node --watch ./api/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Gemini",
+    "AI",
+    "chatbot",
+    "LLM"
+  ],
+  "author": "Abraham Galue",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
