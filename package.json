@@ -2,7 +2,6 @@
   "name": "chatbot-api",
   "version": "1.0.0",
   "description": "API for chatting with Gemini",
-  "main": "index.js",
   "scripts": {
     "dev": "node --watch ./api/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,14 +14,17 @@
   ],
   "author": "Abraham Galue",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
-    "@google/genai": "^0.9.0",
+    "@google/genai": "^1.42.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.3.1",
     "express": "^5.1.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1"
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "typescript": "^5.9.3"
   }
 }

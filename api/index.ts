@@ -1,37 +1,51 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const path = require('path')
-const { GoogleGenAI } = require('@google/genai')
+import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+import path from 'path'
+import { GoogleGenAI } from '@google/genai'
+import { fileURLToPath } from 'url'
 
 const app = express()
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.join(__dirname, 'public')))
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEN_AI_KEY })
 
 app.post('/gemini', async (req, res) => {
-  const chat = ai.chats.create({
-    model: 'gemini-2.0-flash',
-    history: req.body.history,
-  })
+  try {
+    const chat = ai.chats.create({
+      model: 'gemini-2.5-flash-lite',
+      history: req.body.history,
+    })
 
-  const msg = req.body.message
+    const msg = req.body.message
 
-  const result = await chat.sendMessage({
-    message: msg,
-  })
-  const response = result.text
+    const result = await chat.sendMessage({
+      message: msg,
+    })
 
-  res.send(response)
+    const response = result.text
+
+    res.send(response)
+  } catch (e) {
+    if (e.status === 429) {
+      return res.status(429).json({
+        status: 'error',
+        code: 'RATE_LIMIT_EXCEEDED',
+        message: 'Quota limit exceeded. Please try again later.',
+      })
+    }
+
+    res.status(500).json({ status: 'error', message: 'Internal Server Error' })
+  }
 })
 
 app.use((req, res) =>
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  res.sendFile(path.join(__dirname, 'public', 'index.html')),
 )
 
 app.listen(3000, () => console.log('Server ready on port 3000.'))
-
-module.exports = app
